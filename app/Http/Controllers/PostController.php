@@ -77,4 +77,14 @@ class PostController extends Controller
                     ->with('message','Post Editado com sucesso!');
     }
 
+    public function search(Request $request){
+
+        $filters = $request->only('search','page');
+        $posts = Post::where('title','LIKE',"%{$request->search}%")
+                        ->orWhere('content', 'LIKE', "%{$request->search}%")
+                        ->paginate();
+
+        return view('admin.posts.index', compact('posts', 'filters'));
+    }
+
 }
