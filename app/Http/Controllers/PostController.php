@@ -11,7 +11,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::get();
+        $posts = Post::orderBy('id','Desc')->paginate();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -24,7 +24,9 @@ class PostController extends Controller
     {
         Post::create($request->all());
 
-        return redirect()->route('posts.index');
+        return redirect()
+                    ->route('posts.index')
+            ->with('message', 'Post Criado com sucesso!');
     }
 
     public function show($id)
@@ -51,4 +53,28 @@ class PostController extends Controller
                     ->route('posts.index')
                     ->with('message','Post Deletado com Sucesso!');
     }
+
+
+    public function edit($id)
+    {
+        if (!$post = Post::find($id)) {
+            return redirect()->back();
+        }
+
+        return view('admin.posts.edit', compact('post'));
+    }
+
+    public function update(StoreUpdatePost $request, $id)
+    {
+        if (!$post = Post::find($id)) {
+            return redirect()->back();
+        }
+
+        $post->update($request->all());
+
+        return redirect()
+                    ->route('posts.index')
+                    ->with('message','Post Editado com sucesso!');
+    }
+
 }
