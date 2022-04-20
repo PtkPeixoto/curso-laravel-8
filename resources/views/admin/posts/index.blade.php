@@ -29,7 +29,7 @@
     ]
 </p>
 @endforeach
-
+ 
 <hr>
 
 @if (isset($filters))
